@@ -10,7 +10,7 @@ class Frontview_model extends CI_Model
 	function menuKiri()
 	{
 		$this->db->select('*');
-		$this->db->from('menuSide');
+		$this->db->from('sideMenu');
 		$this->db->order_by('id','asc');
 				
 		return $this->db->get()->result();
@@ -31,11 +31,22 @@ class Frontview_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
-	function previewContent(){
+	function previewContent($limit, $start){
+		$query = $this->db->get("contentPost");
 		$this->db->select('*');
 		$this->db->from('contentPost');
+		$this->db->limit($limit,$start);
+		// $this->db->where('id', $id);
 		$this->db->order_by('dateTime','desc');
 		return $this->db->get()->result();
+	}
+
+	function contentCount() {
+		$this->db->select('*');
+		$this->db->from('contentPost');
+		// $this->db->order_by('id','desc');
+				
+		return $this->db->get()->num_rows();
 	}
 
 	function detailContent(){

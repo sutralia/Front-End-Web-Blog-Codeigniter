@@ -9,6 +9,8 @@ class FrontView extends CI_Controller {
 		$this->load->model('frontview_model');
 		$this->load->helper('form');
 		$this->load->helper('date');
+		$this->load->library('pagination');
+		$this->load->helper('url');
 	}
 	
 	public function index()
@@ -18,7 +20,8 @@ class FrontView extends CI_Controller {
 		$data['subMenu'] = $this->frontview_model->subMenuList();
 		$data['menuFooter'] = $this->frontview_model->menuKiri();
 		$data['categories'] = $this->frontview_model->categoriesList();
-		$data['sortcutView'] = $this->frontview_model->previewContent();
+		$data['sortcutView'] = $this->frontview_model->previewContent('1',0);
+		$data['contentCount'] = $this->frontview_model->contentCount();
 		$data['recentPost'] = $this->frontview_model->recentPost();
 		$data['popularPost'] = $this->frontview_model->popularPost();
 		$data['detailContent'] = $this->frontview_model->detailContent();
@@ -38,7 +41,8 @@ class FrontView extends CI_Controller {
 		$data['subMenu'] = $this->frontview_model->subMenuList();
 		$data['menuFooter'] = $this->frontview_model->menuKiri();
 		$data['categories'] = $this->frontview_model->categoriesList();
-		$data['sortcutView'] = $this->frontview_model->previewContent();
+		$data['sortcutView'] = $this->frontview_model->previewContent('1',0);
+		$data['contentCount'] = $this->frontview_model->contentCount();
 		$data['recentPost'] = $this->frontview_model->recentPost();
 		$data['popularPost'] = $this->frontview_model->popularPost();
 		$data['detailContent'] = $this->frontview_model->detailContent();
@@ -71,6 +75,14 @@ class FrontView extends CI_Controller {
 
 	function videos(){
 		$this->load->view('videos_view');
+	}
+
+	function postNext() {
+		$config['base_url'] = site_url('FrontView/postNext');
+ 		$config["uri_segment"] = 3;
+ 		$data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$data['sortcutView'] = $this->frontview_model->previewContent('1',$data['page']);
+		echo json_encode($data['sortcutView']);
 	}
 	
 }

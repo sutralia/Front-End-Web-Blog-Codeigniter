@@ -237,8 +237,8 @@
                     <a class="background-color" href="#">...</a>
 
                     <a class="background-color" href="#">6</a>
-                    <a class="background-color" href="#">7</a>
-                    <a class="background-color" href="#">8</a>
+                    <!-- <a class="background-color" href="#">7</a>
+                    <a class="background-color" href="#">8</a> -->
 
                     <a class="background-color" href="#">...</a>
                     <a class="background-color" href="#">Last</a>

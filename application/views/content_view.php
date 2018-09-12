@@ -132,22 +132,24 @@
 
             <div class="three columns">
             
-            <?php foreach($sortcutView as $sortcutView): ?>
-                    <?php if ($sortcutView->id == $contentDetatil->id) {
-                       $pointer = 'random-blog-item background-color';
-                       $url = '#';
-                    }else{
-                        $pointer = 'random-blog-item';
-                        $url = site_url('FrontView/contentSelect/'.$sortcutView->id);
-                        } ?>
-                     <script type="text/javascript">console.log('samaaa',<?php echo json_encode($url);?>);</script>
-                 <div class="<?php echo $pointer; ?>">
-                    <img src="<?php echo $sortcutView->imgCover ?>" alt="<?php echo $sortcutView->title ?>" class="random-blog-img">
-                    <a href="<?php echo $url; ?>" title="<?php echo $sortcutView->title ?>" class="random-blog-title"><?php echo $sortcutView->title ?></a>
-                    <div class="random-blog-descr" style="width: 142px;display: block;text-overflow: ellipsis;word-wrap: break-word;overflow: hidden;max-height: 3.6em;line-height: 1.2;"><?php echo $sortcutView->isiContent ?></div>
-                    <div class="random-blog-item-bg background-color"></div>
+                <div id="sortcutViewBox">
+                    <?php foreach($sortcutView as $sortcutView): ?>
+                        <?php if ($sortcutView->id == $contentDetatil->id) {
+                           $pointer = 'random-blog-item background-color';
+                           $url = '#';
+                        }else{
+                            $pointer = 'random-blog-item';
+                            $url = site_url('FrontView/contentSelect/'.$sortcutView->id);
+                            } ?>
+                         <script type="text/javascript">console.log('samaaa',<?php echo json_encode($url);?>);</script>
+                     <div class="<?php echo $pointer; ?>">
+                        <img src="<?php echo $sortcutView->imgCover ?>" alt="<?php echo $sortcutView->title ?>" class="random-blog-img">
+                        <a href="<?php echo $url; ?>" title="<?php echo $sortcutView->title ?>" class="random-blog-title"><?php echo $sortcutView->title ?></a>
+                        <div class="random-blog-descr" style="width: 142px;display: block;text-overflow: ellipsis;word-wrap: break-word;overflow: hidden;max-height: 3.6em;line-height: 1.2;"><?php echo $sortcutView->isiContent ?></div>
+                        <div class="random-blog-item-bg background-color"></div>
+                    </div>
+                <?php endforeach ?>
                 </div>
-            <?php endforeach ?>
                 <!-- <div class="random-blog-item">
                     <img src="photos/random-blog-1.png" alt="random blog post" class="random-blog-img">
                     <a href="blog.html" title="random blog post" class="random-blog-title">Responsive Layout</a>
@@ -232,16 +234,16 @@
                     <div class="random-blog-item-bg background-color"></div>
                 </div>
  -->
-                <div class="blog-paging">
-                    <a class="background-color" href="#">First</a>
-                    <a class="background-color" href="#">...</a>
+                <div class="blog-paging" style="text-align: center; width: 100%;">
+                    <a class="background-color" href="#!" id="nextPost">Load More</a>
+                    <!-- <a class="background-color" href="#">...</a>
 
                     <a class="background-color" href="#">6</a>
                     <a class="background-color" href="#">7</a>
                     <a class="background-color" href="#">8</a>
 
                     <a class="background-color" href="#">...</a>
-                    <a class="background-color" href="#">Last</a>
+                    <a class="background-color" href="#">Last</a> -->
                 </div>
 
             </div>
@@ -568,6 +570,45 @@
 <script src="<?php echo base_url('assets/green/js/jquery.mousewheel.js');?>"></script>
 <script src="<?php echo base_url('assets/green/js/tinyscrollbar.js');?>"></script>
 <script src="<?php echo base_url('assets/green/js/custom.js');?>"></script>
+<script type="text/javascript">
+    
+    function nextPost(value){
+    console.log(value)
+    let url = "<?php echo site_url('FrontView/postNext/'); ?>"
+    if (value > 0) {
+        url = url +  '/' +value
+    }
+     $.ajax({
+        type: "POST",
+        url: url,
+        dataType:'json',
+        success: function(response){
+          // console.log('totalNotif',response);
+         let urlLink = "<?php echo site_url('FrontView/contentselect/'); ?>" + '/'
+         for (let x=0; x<response.length; x++) {
+            urlLink = urlLink + response[x].id
+            let postHtlm = '<div class="random-blog-item">'+
+                    '<img src="'+response[x].imgCover+'" alt="" class="random-blog-img">'+
+                    '<a href="'+urlLink+'" title="'+response[x].title+'" class="random-blog-title">'+response[x].title+'</a>'+
+                    '<div class="random-blog-descr" style="width: 142px;display: block;text-overflow: ellipsis;word-wrap: break-word;overflow: hidden;max-height: 3.6em;line-height: 1.2;">'+response[x].isiContent+'</div>'+
+                    '<div class="random-blog-item-bg background-color"></div>'+
+                '</div>';
+            $("#sortcutViewBox").append(postHtlm);
+         }
+        }
+       });  
+    }
+
+
+    $(document).ready(function(){
+    let start = 0
+     $('#nextPost').click(function() {
+        start = start+1
+        console.log('XXXX')
+        nextPost(start);
+     })
+    });
+</script>
 <!--[if lte IE 9]>
 <script src="js/respond.min.js"></script>
 <![endif]-->
